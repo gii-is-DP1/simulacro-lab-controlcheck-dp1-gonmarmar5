@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.petclinic.pet.exceptions.DuplicatedPetNameException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -22,19 +23,19 @@ public class ProductController {
 
 	@Autowired
 	ProductService productService;
-    
-	@PostMapping(path = "/product/created")
-	public String processCreatingProduct(@Valid Product p, BindingResult result, Map<String, Object> model){
-		if(result.hasErrors()){
+  
+	@PostMapping(value = "/product/created")
+	public String processCreationForm(Product p, BindingResult result, Map<String, Object> model) {		
+		if (result.hasErrors()) {
 			model.put("productType", this.productRepository.findAllNameProductTypes());
 			return "products/createOrUpdateProductForm";
 		}
-		else{
+		else {
 			productService.save(p);
 			model.put("message", "Producto añadido");
-		}
-
+		
 		return "welcome";
+		}
 	}
 
 	@GetMapping({"/product/create"})
