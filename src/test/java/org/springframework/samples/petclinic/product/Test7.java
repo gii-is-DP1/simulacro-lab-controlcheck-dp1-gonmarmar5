@@ -2,36 +2,64 @@ package org.springframework.samples.petclinic.product;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
 
-import java.util.Optional;
+import java.text.ParseException;
 
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.stereotype.Service;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
+@ExtendWith(SpringExtension.class)
+@SpringBootTest
 public class Test7 {
+
     @Autowired
-    ProductRepository pr;
-    
+    ProductTypeFormatter formatter;
 
     @Test
-    @DisplayName("The DB is initialized with two products associated to two product types")
-    public void testInitialProducts(){
+    public void test6(){
+        testFormatterIsInjected();
+        testFormatterObject2String();
+        testFormatterString2Object();
+        testFormatterString2ObjectNotFound();
+    }
+
+
+    
+    public void testFormatterIsInjected(){
+        assertNotNull(formatter);
+    }
+
+    
+    public void testFormatterObject2String(){
+        ProductType pt=new ProductType();
+        pt.setName("Prueba");
+        String result=formatter.print(pt, null);
+        assertEquals("Prueba",result);
+    }
+
+    
+    public void testFormatterString2Object(){
+        String name="Food";
+        ProductType pt;
+        try {
+            pt = formatter.parse(name, null);
+            assertNotNull(pt);
+            assertEquals(pt.getName(),name);
+        } catch (ParseException e) {           
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
         
-        Optional<Product> p1=pr.findById(1);
-        assertTrue(p1.isPresent(),"Product with id:1 not found");
-        assertNotNull(p1.get().getProductType(),"The product with id:1 has not a product type associated");
-        assertEquals("Accessories",p1.get().getProductType().getName(),"The name of the product type associated to the product with id:1 is not 'Accessories'");
+    }
 
-        Optional<Product> p2=pr.findById(2);
-        assertTrue(p2.isPresent(),"Product with id:2 not found");
-        assertNotNull(p2.get().getProductType(),"The product with id:2 has not a product type associated");
-        assertEquals(p2.get().getProductType().getName(),"Food","The name of the product type associated to the product with id:2 is not 'Food'");
-
+    
+    public void testFormatterString2ObjectNotFound(){
+        String name="This is not a product type";
+        assertThrows(ParseException.class, () -> formatter.parse(name, null));          
     }
 }

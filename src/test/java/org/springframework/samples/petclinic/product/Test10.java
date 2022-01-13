@@ -7,6 +7,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,10 +33,10 @@ import org.springframework.test.web.servlet.MockMvc;
 		excludeAutoConfiguration= SecurityConfiguration.class)
 public class Test10 {
     @MockBean
-	private ProductService productService;
+    private ProductService productService;
 
     @Autowired
-	private MockMvc mockMvc;
+    private MockMvc mockMvc;
 
     @BeforeEach
     public void configureMock(){
@@ -41,6 +44,9 @@ public class Test10 {
         pt.setName("Food");
         Mockito.when(productService.save(any(Product.class))).thenReturn(null);
         Mockito.when(productService.getProductType("Food")).thenReturn(pt);
+        List<ProductType> pts=new ArrayList<ProductType>();
+        pts.add(pt);
+        // Mockito.when(productService.findAllProductTypes()).thenReturn(pts);
     }
 
     @WithMockUser(value = "spring", authorities = {"admin"})
