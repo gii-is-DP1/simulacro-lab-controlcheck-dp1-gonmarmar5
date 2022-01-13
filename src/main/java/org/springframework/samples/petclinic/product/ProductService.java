@@ -3,8 +3,10 @@ package org.springframework.samples.petclinic.product;
 import java.util.List;
 
 public class ProductService {
+     ProductRepository productRepository;
+
     public List<Product> getAllProducts(){
-        return null;
+        return this.productRepository.findAll();
     }
 
     public List<Product> getProductsCheaperThan(double price) {
