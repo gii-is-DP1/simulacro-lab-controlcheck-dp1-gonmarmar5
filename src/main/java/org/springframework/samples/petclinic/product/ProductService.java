@@ -7,6 +7,10 @@ public class ProductService {
         return null;
     }
 
+    public List<Product> prueba(){
+        return null;
+    }
+
     public List<Product> getProductsCheaperThan(double price) {
         return null;
     }
