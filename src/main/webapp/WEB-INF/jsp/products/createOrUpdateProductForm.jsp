@@ -12,4 +12,17 @@
             <img class="img-responsive" src="${petsImage}"/>
         </div>
     </div>
+    <div>
+     
+        <form:form modelAttribute="product" action="/product/created" method="POST" >
+            <input type="text" name="name" placeholder="name"/> <br> <br>
+            <input type="number" name="price" placeholder="price"/> <br> <br>
+            
+            <petclinic:selectField name="productType" label= "productType" names="${productType}" size="3"/> 
+            
+            <input type="submit" value="Crear"/>
+        </form:form>     
+    </div>
+
+    
 </petclinic:layout>

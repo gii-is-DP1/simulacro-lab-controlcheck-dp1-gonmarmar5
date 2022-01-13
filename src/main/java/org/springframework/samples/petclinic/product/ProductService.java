@@ -23,7 +23,7 @@ public class ProductService {
     }
 
     public Product save(Product p){
-        return null;       
+        return this.productRepository.save(p);       
     }
 
     

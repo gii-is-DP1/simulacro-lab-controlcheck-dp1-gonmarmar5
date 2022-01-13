@@ -12,4 +12,8 @@
             <img class="img-responsive" src="${petsImage}"/>
         </div>
     </div>
+
+    <div>
+        Hola
+    </div>
 </petclinic:layout>
